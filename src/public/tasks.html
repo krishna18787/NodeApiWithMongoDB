@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="panel">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">MongoDB CRUD Demo</p>
+            <h1>Task Manager</h1>
+          </div>
+          <div class="topbar-actions">
+            <p id="user-greeting" class="user-greeting">Loading user...</p>
+            <button id="logout-button" class="secondary" type="button">Logout</button>
+          </div>
+        </div>
+        <p class="intro">
+          This page uses HTML and JavaScript to call your Express API, which
+          then stores data in MongoDB.
+        </p>
+
+        <div class="profile-card">
+          <div class="profile-media">
+            <img
+              id="profile-preview"
+              src=""
+              alt="Profile preview"
+              class="profile-image hidden"
+            />
+            <div id="profile-placeholder" class="profile-placeholder">No image</div>
+          </div>
+          <form id="profile-form" class="profile-form">
+            <label>
+              <span>Name</span>
+              <input id="profile-name" name="name" type="text" placeholder="Enter profile name" />
+            </label>
+            <label>
+              <span>Profile Image</span>
+              <input id="profile-image" name="image" type="file" accept="image/png,image/jpeg,image/webp" />
+            </label>
+            <button type="submit">Upload Profile Image</button>
+            <p id="profile-status" class="status">No profile uploaded yet.</p>
+          </form>
+        </div>
+
+        <form id="task-form" class="task-form">
+          <input type="hidden" id="task-id" />
+          <label>
+            <span>Title</span>
+            <input id="title" name="title" type="text" placeholder="Enter task title" required />
+          </label>
+          <label>
+            <span>Description</span>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              placeholder="Enter task description"
+            ></textarea>
+          </label>
+          <label class="checkbox">
+            <input id="completed" name="completed" type="checkbox" />
+            <span>Completed</span>
+          </label>
+          <div class="actions">
+            <button type="submit" id="submit-button">Create Task</button>
+            <button type="button" id="cancel-button" class="secondary hidden">
+              Cancel Edit
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <h2>Tasks</h2>
+          <button id="refresh-button" class="secondary">Refresh</button>
+        </div>
+        <p id="status" class="status">Loading tasks...</p>
+        <ul id="task-list" class="task-list"></ul>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+  </html>
