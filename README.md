@@ -12,6 +12,7 @@ This project contains a minimal Express server with two endpoints:
 - `POST /api/auth/login` — login and return a JWT.
 - `GET /api/auth/me` — return the logged-in user from a bearer token.
 - `GET /api/profile` — fetch the latest uploaded profile image metadata.
+- `GET /api/profile/history` — fetch all uploaded profile image records.
 - `POST /api/profile` — upload a profile image with `multipart/form-data`.
 - `POST /api/tasks` — create a task.
 - `GET /api/tasks` — list all tasks.
@@ -33,7 +34,7 @@ Node.js requirement: `20.19.0` or newer.
 MongoDB setup
 
 1. Install MongoDB locally or create a free cluster in MongoDB Atlas.
-2. Open `.env` and set `MONGODB_URI` and `JWT_SECRET`.
+2. Open `.env` and set `MONGODB_URI`, `JWT_SECRET`, and Cloudinary credentials.
 3. Start the API. The server will connect to MongoDB before listening on the port.
 
 Example local connection:
@@ -46,6 +47,14 @@ Example MongoDB Atlas connection:
 
 ```bash
 MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/npm-server?retryWrites=true&w=majority
+```
+
+Cloudinary setup:
+
+```bash
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
 ```
 
 Test examples

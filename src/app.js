@@ -1,6 +1,5 @@
 const express = require('express');
-const path = require('path');
-const fs = require('fs');
+const path = require('path'); 
 const multer = require('multer');
 const registerSwagger = require('./docs/swagger');
 const systemRoutes = require('./routes/systemRoutes');
@@ -8,14 +7,11 @@ const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 
-const app = express();
-const uploadsPath = path.join(__dirname, 'uploads');
-
-fs.mkdirSync(uploadsPath, { recursive: true });
+const app = express(); 
+ 
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(uploadsPath));
+app.use(express.static(path.join(__dirname, 'public'))); 
 registerSwagger(app);
 
 app.use('/api', systemRoutes);

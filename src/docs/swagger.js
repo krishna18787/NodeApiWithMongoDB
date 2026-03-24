@@ -765,6 +765,27 @@ const swaggerDocument = {
         },
       },
     },
+    '/api/profile/history': {
+      get: {
+        tags: ['Profile'],
+        summary: 'Get all uploaded profile images',
+        responses: {
+          200: {
+            description: 'Profile upload history',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/Profile',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
 

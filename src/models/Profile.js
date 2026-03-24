@@ -15,6 +15,10 @@ const profileSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    imagePublicId: {
+      type: String,
+      required: true,
+    },
     imageMimeType: {
       type: String,
       required: true,

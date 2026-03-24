@@ -1,6 +1,26 @@
-const fs = require('fs');
-const path = require('path');
 const Profile = require('../models/Profile');
+const cloudinary = require('../config/cloudinary');
+
+function uploadToCloudinary(fileBuffer, originalname) {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'npm-server/profile-images',
+        resource_type: 'image',
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve(result);
+      }
+    );
+
+    uploadStream.end(fileBuffer);
+  });
+}
 
 async function getProfile(req, res) {
   try {
@@ -16,71 +36,43 @@ async function getProfile(req, res) {
   }
 }
 
+async function getProfileHistory(req, res) {
+  try {
+    const profiles = await Profile.find().sort({ createdAt: -1 });
+    res.json(profiles);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 async function uploadProfile(req, res) {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'image file is required' });
     }
 
-    const existingProfile = await Profile.findOne().sort({ updatedAt: -1 });
-    const imageUrl = `/uploads/profiles/${req.file.filename}`;
+    const uploadResult = await uploadToCloudinary(
+      req.file.buffer,
+      req.file.originalname
+    );
 
-    const profileData = {
-      name: req.body.name || existingProfile?.name || 'User',
-      imageUrl,
-      imageFilename: req.file.filename,
+    const profile = await Profile.create({
+      name: req.body.name || 'User',
+      imageUrl: uploadResult.secure_url,
+      imageFilename: uploadResult.original_filename || req.file.originalname,
+      imagePublicId: uploadResult.public_id,
       imageMimeType: req.file.mimetype,
       imageSize: req.file.size,
-    };
+    });
 
-    let profile;
-
-    if (existingProfile) {
-      const oldFilePath = path.join(
-        __dirname,
-        '..',
-        'uploads',
-        'profiles',
-        existingProfile.imageFilename
-      );
-
-      profile = await Profile.findByIdAndUpdate(existingProfile._id, profileData, {
-        new: true,
-        runValidators: true,
-      });
-
-      if (
-        existingProfile.imageFilename &&
-        existingProfile.imageFilename !== req.file.filename &&
-        fs.existsSync(oldFilePath)
-      ) {
-        fs.unlinkSync(oldFilePath);
-      }
-    } else {
-      profile = await Profile.create(profileData);
-    }
-
-    res.status(existingProfile ? 200 : 201).json(profile);
+    res.status(201).json(profile);
   } catch (error) {
-    if (req.file) {
-      const uploadedFilePath = path.join(
-        __dirname,
-        '..',
-        'uploads',
-        'profiles',
-        req.file.filename
-      );
-
-      if (fs.existsSync(uploadedFilePath)) {
-        fs.unlinkSync(uploadedFilePath);
-      }
-    }
-
     res.status(500).json({ error: error.message });
   }
 }
 
 module.exports = {
   getProfile,
+  getProfileHistory,
   uploadProfile,
 };
