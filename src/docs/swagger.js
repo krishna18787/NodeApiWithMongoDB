@@ -66,6 +66,10 @@ const swaggerDocument = {
             type: 'string',
             example: 'krishna@example.com',
           },
+          role: {
+            type: 'string',
+            example: 'admin',
+          },
           createdAt: {
             type: 'string',
             format: 'date-time',
@@ -94,7 +98,7 @@ const swaggerDocument = {
       },
       RegisterRequest: {
         type: 'object',
-        required: ['name', 'email', 'password'],
+        required: ['name', 'email', 'role', 'password'],
         properties: {
           name: {
             type: 'string',
@@ -104,6 +108,10 @@ const swaggerDocument = {
             type: 'string',
             format: 'email',
             example: 'krishna@example.com',
+          },
+          role: {
+            type: 'string',
+            example: 'admin',
           },
           password: {
             type: 'string',

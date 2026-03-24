@@ -18,6 +18,7 @@ function sanitizeUser(user) {
     id: user._id,
     name: user.name,
     email: user.email,
+    role: user.role,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
@@ -25,7 +26,7 @@ function sanitizeUser(user) {
 
 async function register(req, res) {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, role, password } = req.body;
 
     if (!name || !name.trim()) {
       return res.status(400).json({ error: 'name is required' });
@@ -33,6 +34,10 @@ async function register(req, res) {
 
     if (!email || !email.trim()) {
       return res.status(400).json({ error: 'email is required' });
+    }
+
+    if (!role || !role.trim()) {
+      return res.status(400).json({ error: 'role is required' });
     }
 
     if (!password || password.length < 6) {
@@ -52,6 +57,7 @@ async function register(req, res) {
     const user = await User.create({
       name: name.trim(),
       email: normalizedEmail,
+      role: role.trim().toLowerCase(),
       password: hashedPassword,
     });
     const token = signToken(user);

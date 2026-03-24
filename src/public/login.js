@@ -84,6 +84,7 @@ async function submitRegister(event) {
   const payload = {
     name: document.getElementById('register-name').value,
     email: document.getElementById('register-email').value,
+    role: document.getElementById('register-role').value,
     password: document.getElementById('register-password').value,
   };
 
